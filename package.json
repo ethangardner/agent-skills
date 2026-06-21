@@ -1,0 +1,16 @@
+{
+  "name": "agent-skills",
+  "version": "0.1.0",
+  "description": "",
+  "homepage": "https://github.com/ethangardner/agent-skills#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ethangardner/agent-skills.git"
+  },
+  "license": "ISC",
+  "author": "Ethan Gardner",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
