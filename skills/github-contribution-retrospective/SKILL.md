@@ -116,6 +116,14 @@ specific PR/commit/review numbers as you find them:
   own PRs.** If the subject asks contributors for tests/docs/rationale in
   review, do their own PRs meet that same bar? This is often the most
   revealing dimension — check it explicitly rather than assuming either way.
+  But weigh this against the repo's actual audience reach and permanence
+  before calling it a gap (see `change-documentation-rigor`'s "scale by
+  audience reach and permanence" guidance): thin PR bodies on a
+  widely-consumed, long-lived platform is a real finding; the same thinness
+  on a solo tool or a repo whose output is ephemeral/regenerated on a
+  schedule is calibrated judgment, not a shortfall — say so explicitly
+  rather than flagging every instance of "docs were thinner here" at the
+  same weight regardless of what was actually at stake.
 - **Responsiveness signals** — timestamps between PR open and first review;
   any self-acknowledged delays visible in review comments ("thanks for your
   patience waiting on me"); PRs that were opened, abandoned, and re-done
