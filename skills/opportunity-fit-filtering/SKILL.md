@@ -66,7 +66,11 @@ re-derived from scratch under pressure).
 
 For the surrounding project-planning and ethical-obligation dimensions of a
 role or engagement (once its *terms* have passed this filter), see
-`swebok-professional-practice` and `swebok-management`.
+`swebok-professional-practice` and `swebok-management`. This skill decides on
+a *specific* offer already on the table — for deciding whether a whole
+market or line of business is worth pursuing before any specific offer
+exists, see `market-opportunity-evaluation`; for the outreach that generates
+these offers in the first place, see `business-development-outreach`.
 
 ## When NOT to over-apply this
 
