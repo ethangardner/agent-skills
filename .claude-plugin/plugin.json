@@ -1,0 +1,20 @@
+{
+  "name": "ethangardner-agent-skills",
+  "skills": [
+    "./skills/change-documentation-rigor",
+    "./skills/constructive-code-review",
+    "./skills/github-contribution-retrospective",
+    "./skills/go-pointer-value-semantics",
+    "./skills/low-risk-change-verification",
+    "./skills/swebok-architecture",
+    "./skills/swebok-configuration-management",
+    "./skills/swebok-construction",
+    "./skills/swebok-design",
+    "./skills/swebok-maintenance",
+    "./skills/swebok-operations",
+    "./skills/swebok-quality",
+    "./skills/swebok-requirements",
+    "./skills/swebok-security",
+    "./skills/swebok-testing"
+  ]
+}
