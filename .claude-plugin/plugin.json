@@ -1,26 +1,11 @@
 {
   "name": "ethangardner-agent-skills",
-  "skills": [
-    "./skills/agentic-narrative-reframing",
-    "./skills/change-documentation-rigor",
-    "./skills/constructive-code-review",
-    "./skills/desk-research",
-    "./skills/failure-mode-classification",
-    "./skills/github-contribution-retrospective",
-    "./skills/go-pointer-value-semantics",
-    "./skills/low-risk-change-verification",
-    "./skills/opportunity-fit-filtering",
-    "./skills/swebok-architecture",
-    "./skills/swebok-configuration-management",
-    "./skills/swebok-construction",
-    "./skills/swebok-design",
-    "./skills/swebok-maintenance",
-    "./skills/swebok-operations",
-    "./skills/swebok-quality",
-    "./skills/swebok-requirements",
-    "./skills/swebok-security",
-    "./skills/swebok-testing",
-    "./skills/technical-blog-drafting",
-    "./skills/web-performance-audit"
-  ]
+  "description": "A collection of agent skills for software engineering, based on SWEBOK V4 and other engineering disciplines.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Ethan Gardner"
+  },
+  "homepage": "https://github.com/ethangardner/agent-skills#readme",
+  "repository": "https://github.com/ethangardner/agent-skills",
+  "license": "ISC"
 }

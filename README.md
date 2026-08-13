@@ -29,3 +29,10 @@ git clone https://github.com/ethangardner/agent-skills.git
 cd agent-skills
 npm run link
 ```
+
+### Using the Claude Code plugin marketplace
+
+```
+/plugin marketplace add ethangardner/agent-skills
+/plugin install ethangardner-agent-skills@ethangardner-agent-skills
+```

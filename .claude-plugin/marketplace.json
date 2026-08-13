@@ -1,0 +1,14 @@
+{
+  "name": "ethangardner-agent-skills",
+  "owner": {
+    "name": "Ethan Gardner"
+  },
+  "description": "A collection of agent skills for software engineering, based on SWEBOK V4 and other engineering disciplines.",
+  "plugins": [
+    {
+      "name": "ethangardner-agent-skills",
+      "source": "./",
+      "description": "A collection of agent skills for software engineering, based on SWEBOK V4 and other engineering disciplines."
+    }
+  ]
+}
