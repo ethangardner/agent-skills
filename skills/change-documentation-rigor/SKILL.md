@@ -17,12 +17,9 @@ description: >-
 
 # Change Documentation Rigor
 
-A commit message or PR description is read by someone who wasn't in the room
-when the change was made — often you, months later, trying to remember why
-you rejected the obvious alternative. "What changed" is visible in the diff
-itself; a message that only restates the diff ("update deps", "fix bug") adds
-nothing a `git log -p` wouldn't already show. The message earns its keep by
-carrying what the diff *can't* show: why, what was verified, and what was
+A commit message or PR description serves readers who were not present when
+the change was made. The diff already shows *what* changed; the message should
+preserve what it cannot: why, what was verified, and which alternatives were
 considered and rejected.
 
 ## The three questions every message answers

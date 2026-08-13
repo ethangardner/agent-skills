@@ -18,12 +18,10 @@ description: >-
 
 # Constructive Code Review
 
-Review feedback does two things at once: it changes this PR, and it teaches
-the contributor (and anyone reading the review later) what matters and why.
-Vague feedback fails both — the contributor can't act on it, and no one
-learns anything from it. Feedback that doesn't say whether it's optional
-forces the contributor to guess, which either stalls the PR on something
-minor or lets something real slip through because it read like a nitpick.
+Review feedback changes the PR and teaches what matters. Vague feedback fails
+both goals: the contributor cannot act on it, and readers learn nothing. Mark
+each point's severity so minor suggestions do not stall the PR and real issues
+do not sound optional.
 
 ## Every comment signals its own severity
 

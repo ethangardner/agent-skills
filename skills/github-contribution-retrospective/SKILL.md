@@ -18,12 +18,10 @@ description: >-
 
 # GitHub Contribution Retrospective
 
-A retrospective built from what someone actually did — their commits, their
-PRs, and the reviews and comments they left on other people's work — is
-harder to get from self-reflection alone and harder to dismiss than a general
-impression, because every claim traces back to a specific PR, commit, or
-review. This skill turns a `{repo, GitHub login}` pair into that kind of
-evidence-cited retrospective.
+A retrospective built from commits, authored PRs, and reviews or comments on
+others' work is more useful than a general impression because each claim can
+trace to a specific artifact. This skill turns a `{repo, GitHub login}` pair
+into that evidence-cited retrospective.
 
 ## Philosophy
 

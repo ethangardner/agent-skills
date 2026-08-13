@@ -1,10 +1,8 @@
 # PR description template (fallback)
 
-Use this only when the repo has no native template of its own — check first
-for `.github/pull_request_template.md` (or `docs/`, or root), `.gitlab/merge_request_templates/*.md`,
-or `.bitbucket/pull_request_template.md` (see the main SKILL.md). When one of
-those exists, fill it in instead; it's the shape reviewers on this repo
-already expect.
+Use this only when the repo has no native template. Check the GitHub, GitLab,
+and Bitbucket paths listed in `SKILL.md` first; if one exists, fill it in
+instead because it is the shape that repo's reviewers expect.
 
 When this fallback does apply, use it for every non-trivial PR, including
 infra/build/CI-only changes. Omit a section only when it's genuinely not
@@ -29,16 +27,6 @@ Link the issue(s) this addresses. Use "Closes #N" only when this PR fully
 resolves it; if it only partially addresses a multi-part issue, say so
 explicitly and name what's left and why it's deferred.
 
-## Related pull requests
-
-Note any PRs this depends on, blocks, or should land alongside. "None" if
-genuinely standalone.
-
-## Preview link
-
-Link a live preview/build if the project supports one. "N/A" with a one-word
-reason (e.g. "CI workflow change only") if not applicable.
-
 ## Problem statement
 
 What was wrong or missing before this PR? Written so someone unfamiliar with
@@ -60,13 +48,4 @@ each — a map for the reviewer, not a restatement of the whole diff.
 Concrete, reproducible verification steps a reviewer can run themselves:
 commands to run, expected output, what to check manually. Not "tested
 locally" — the actual steps.
-
-## Dependency updates (batch/dependency PRs only)
-
-| Dependency | Previous version | New version |
-| ---------- | :---------------: | :---------: |
-| `pkg-name` |       x.y.z       |    a.b.c    |
-
-Include a note for any package considered but *not* updated in this batch,
-and why.
 ```

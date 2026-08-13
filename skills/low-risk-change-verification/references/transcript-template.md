@@ -1,8 +1,8 @@
 # Verification transcript template
 
-Attach this as a review comment or PR/approval note for mechanical or
-apparently-low-risk changes. Keep it short — this is a scan, not an essay —
-but every section should contain a real answer, not a placeholder.
+Attach this to the review comment or PR/approval note for mechanical or
+apparently low-risk changes. Keep it short, but answer every section with
+evidence rather than a placeholder.
 
 ```markdown
 **Verification transcript** *(AI-assisted, via <tool/agent name>, if applicable)*

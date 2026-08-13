@@ -14,22 +14,16 @@ description: >-
 
 # Desk Research
 
-Desk research answers a question using data that already exists, instead of
-generating new data (surveys, interviews, experiments) or shipping a
-feature. The deliverable is a defensible answer plus a trail showing how you
-got there — not production code, and not a conclusion asserted without its
-working shown.
+Desk research answers a question with existing data, rather than new data
+(surveys, interviews, experiments) or a shipped feature. Deliver a defensible
+answer and a checkable trail — not production code or an unsupported claim.
 
 ## Philosophy
 
-1. **The exploratory trail is part of the deliverable, not something to
-   clean up.** This is the one place that instinct inverts from most
-   engineering work: `change-documentation-rigor` says keep exploration out
-   of a production PR's history; here the artifact under version control
-   *is* the research process, so a visible "tried X, tried Y, landed on Z"
-   trail — dead ends included — is evidence the conclusion was earned, not
-   a mess to squash away. A commit that just says "wip" mid-investigation is
-   fine; it's honest about where the thinking was at that point.
+1. **Keep the exploratory trail.** Unlike production work, the versioned
+   artifact *is* the research process. Preserve tried approaches and dead ends
+   as evidence; a mid-investigation `wip` commit is acceptable. For production
+   history, `change-documentation-rigor` still says to keep exploration out.
 
 2. **Search free parameters explicitly; don't assert a value.** Any
    technique with a tunable parameter (cluster count, threshold, window

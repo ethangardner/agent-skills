@@ -15,12 +15,10 @@ description: >-
 
 # Failure Mode Classification
 
-A bug report that says "sometimes X is stale" gets re-investigated from
-scratch every time it resurfaces, because nothing links this occurrence to
-the last one. A bug that's named — "failure mode 2: retries exhausted with
-no terminal write" — gets recognized on sight the second time, and its fix
-PR becomes the reference the next investigator starts from instead of a
-blank page.
+A report such as "sometimes X is stale" gets re-investigated from scratch
+when it returns. A stable label — "failure mode 2: retries exhausted with no
+terminal write" — links occurrences and makes the fix PR a starting point for
+the next investigation.
 
 ## Name the failure mode before fixing it
 

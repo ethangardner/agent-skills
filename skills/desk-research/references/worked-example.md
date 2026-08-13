@@ -1,8 +1,7 @@
 # Worked example: URL clustering against performance data
 
-From `GSA-TTS/10x-web-performance-optimization-research`, PRs #4 and #5 —
-a small, real desk-research trail that follows the shape in `SKILL.md`
-end to end.
+PRs #4 and #5 from `GSA-TTS/10x-web-performance-optimization-research` show
+the `SKILL.md` workflow end to end.
 
 ## The question
 

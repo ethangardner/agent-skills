@@ -17,14 +17,10 @@ description: >-
 
 # Low-Risk Change Verification
 
-The changes that look safest are exactly where scrutiny goes to zero fastest
-— a version bump, a regenerated lockfile, a formatter re-run. That's also
-where real problems hide best: a transitive dependency that changed behavior,
-a major-version bump that alters output the "just a bump" framing didn't
-flag, a codemod that touched a file its author didn't expect. A bare "LGTM"
-on this class of change is a guess dressed as a decision. A short, consistent
-verification transcript turns it into an actual decision, and gives the next
-person a record instead of a shrug.
+Scrutiny drops fastest for changes that look safest: version bumps,
+regenerated lockfiles, and formatter runs. Yet transitive behavior changes,
+major-version output changes, and unexpected codemod edits can hide there. A
+short, consistent transcript replaces a bare "LGTM" with a checkable decision.
 
 ## What the transcript covers
 
