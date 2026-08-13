@@ -82,9 +82,19 @@ answer and a checkable trail — not production code or an unsupported claim.
    confidence up front, with the trail available for anyone who wants to
    check the work.
 
-See `references/worked-example.md` for a real trail that follows this shape
-end to end, including exactly what the commit history and PR scoping looked
-like.
+Two real trails, covering different research shapes, follow this end to
+end:
+
+- `references/worked-example-quantitative-analysis.md` — statistical
+  analysis (clustering) validated against an independent dataset.
+- `references/worked-example-inventory-analysis.md` — no dataset: an
+  inventory of the current state plus a comparative analysis against
+  external prior art, turned into recorded, amendable decisions and a
+  phased plan. Also shows what's missing when a thorough research trail
+  never gets in front of a reviewer.
+
+Pick whichever matches the shape of the question at hand — most desk
+research is one or the other, not always a dataset to crunch.
 
 ## When NOT to over-apply this
 

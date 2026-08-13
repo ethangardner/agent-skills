@@ -1,5 +1,8 @@
 # Worked example: URL clustering against performance data
 
+*Research type: quantitative analysis — statistical clustering, validated
+against independent data.*
+
 PRs #4 and #5 from `GSA-TTS/10x-web-performance-optimization-research` show
 the `SKILL.md` workflow end to end.
 
