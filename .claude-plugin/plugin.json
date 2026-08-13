@@ -3,6 +3,7 @@
   "skills": [
     "./skills/change-documentation-rigor",
     "./skills/constructive-code-review",
+    "./skills/failure-mode-classification",
     "./skills/github-contribution-retrospective",
     "./skills/go-pointer-value-semantics",
     "./skills/low-risk-change-verification",

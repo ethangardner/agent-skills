@@ -77,7 +77,11 @@ side effects, safe to run without asking. The exact commands, with
    CHANGES_REQUESTED / COMMENTED) across *all* reviews, not just a sample, so
    the ratio you report is real. Then sample review-summary bodies and a
    handful of inline (line-level) review comments to check whether the tone
-   and specificity you see in the summary also holds at the line level.
+   and specificity you see in the summary also holds at the line level. Note
+   how many of the reviewed PRs are bot-authored (Dependabot, Renovate, and
+   similar) versus human-authored — the two populations carry structurally
+   different risk and tone, and a sample dominated by one will misrepresent
+   the subject's review style if reported without that context (see Step 3).
 4. **Comment volume** — how often the subject shows up in other people's
    issues/PRs at all, as a rough signal of engagement beyond their own work.
 
@@ -102,7 +106,12 @@ specific PR/commit/review numbers as you find them:
   feedback tied to lines/behavior, or generic approval/rejection? Do they
   credit the contributor, distinguish hard blockers from suggestions, and
   loop in relevant code owners? Vague "LGTM"-only reviews vs. substantive
-  ones are both worth naming honestly.
+  ones are both worth naming honestly. Read bot-authored and human-authored
+  reviews as separate populations: a review sample that's mostly Dependabot
+  approvals with a repeated verification transcript reflects a
+  low-risk-change-verification habit, not a "rarely pushes back on
+  contributors" finding — don't blend the two into one ratio without saying
+  so.
 - **Consistency between what's demanded of others and what's done in one's
   own PRs.** If the subject asks contributors for tests/docs/rationale in
   review, do their own PRs meet that same bar? This is often the most
@@ -154,3 +163,10 @@ signal for a confident retrospective — say so rather than stretching thin
 data into broad claims. If the ask is really "review this one PR" or "help
 me write a better commit message", that's code review or construction
 guidance, not this skill.
+
+A structurally empty surface is not the same thing as a weak finding on that
+surface. A solo repo with no external contributors will return zero reviews
+given to others — that's silence caused by there being no one else's code to
+review, not evidence about reviewing style. Say so plainly in the output
+("no review data — solo repo") rather than omitting the dimension silently
+or, worse, treating its absence as a gap to strengthen.

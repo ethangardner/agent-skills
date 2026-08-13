@@ -77,6 +77,16 @@ feature in a way the author didn't anticipate, what happens on the failure
 path. Spend the scrutiny where the blast radius is, not evenly across every
 line.
 
+"Mechanical" and "low-risk" are different axes — don't conflate a small,
+easy-to-read diff with a safe one. A dependency bump or a generated/codemod
+diff is mechanical (little to read, no design judgment involved) but often
+carries real risk (supply-chain, transitive behavior change), so it doesn't
+belong in the light-pass bucket just because it's short. That class of
+change routes to `low-risk-change-verification`'s transcript treatment
+instead — reserve the genuine light pass for changes that are mechanical
+*and* have no behavior surface at all, like formatting, comments, or
+docs-only config.
+
 ## Decide, don't stall
 
 Once the must-fix bar is met, approve. Don't hold a PR open on

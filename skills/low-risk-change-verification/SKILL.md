@@ -44,7 +44,11 @@ Before approving, produce a short transcript answering:
 4. **Confirmation** — the actual check performed and its result: tests run
    and pass count, build output diffed against baseline (ideally
    byte-identical where that's the claim), a linked CI run. State what was
-   checked, not just "looks fine."
+   checked, not just "looks fine." Compare against a *known* baseline rather
+   than expecting a clean slate — e.g. "same 38 pre-existing failures as
+   main" is a real, checkable confirmation on a codebase with known flake;
+   demanding zero failures on such a codebase makes the check either
+   impossible to pass honestly or something people learn to fudge.
 
 See `references/transcript-template.md` for a copy-pasteable skeleton.
 
@@ -74,6 +78,14 @@ evidence of mood. Pick the bar for a given class of change (e.g. "every
 major-version bump gets a transcript; patch bumps get a lighter check") and
 hold it steady, so an absent transcript is itself a signal something was
 missed rather than just an inconsistency.
+
+Once the transcript shape is right for a given change class in a given
+repo, reuse it verbatim rather than re-deriving it each time — the same
+diff-scope/mechanism/impact/confirmation structure, filled in fresh each
+time but not reworded from scratch. Re-deriving the shape every time is what
+makes the discipline expensive enough to skip under time pressure; reusing a
+settled shape is what makes it sustainable enough to actually hold at #100
+the same way it held at #1.
 
 ## When NOT to over-apply this
 

@@ -114,3 +114,11 @@ reader to reconstruct the reasoning without it: cheap to reconstruct (trivial,
 obviously-correct changes) needs little; expensive to reconstruct (anything
 involving a judgment call, a rejected alternative, or a non-obvious fix)
 needs the full treatment.
+
+Scaling down for a low-audience repo (a solo project, no external reviewer)
+means trimming the narrative — Problem Statement and Solution prose can
+shrink to a sentence. It does not mean dropping the verification/evidence
+line to nothing. A claim like "improves performance" or "fixes the bug" with
+no stated evidence is a gap regardless of who's reading it — if you ran a
+benchmark, checked output, or added a test to confirm it, say so in one
+line, even when there's no reviewer to convince but yourself.
