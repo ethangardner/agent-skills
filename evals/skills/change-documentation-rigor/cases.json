@@ -1,0 +1,82 @@
+{
+  "skill": "change-documentation-rigor",
+  "trigger_positive": [
+    {
+      "id": "tp-1",
+      "prompt": "Commit this.",
+      "source_phrase": "\"Trigger even when the user just says 'commit this' without asking for a message\""
+    },
+    {
+      "id": "tp-2",
+      "prompt": "Write a commit message for this: I changed the retry backoff in the payment worker from a fixed 1s delay to exponential backoff starting at 200ms, because we were hammering the provider's API during outages and getting rate-limited harder as a result. Ran the existing retry test suite plus a new test simulating a provider outage; both pass.",
+      "source_phrase": "\"write a commit message for this\""
+    },
+    {
+      "id": "tp-3",
+      "prompt": "Explain this dependency bump: lodash 4.17.15 -> 4.17.21.",
+      "source_phrase": "\"explain this dependency bump\""
+    },
+    {
+      "id": "tp-4",
+      "prompt": "Describe this PR for me: it adds a feature flag to gate the new checkout flow, defaulting to off in production.",
+      "source_phrase": "\"describe this PR\""
+    },
+    {
+      "id": "tp-5",
+      "prompt": "Write a changelog entry for this release — it includes the checkout flag, a fix for the stale-timestamp bug, and the lodash bump.",
+      "source_phrase": "\"write a changelog entry\""
+    }
+  ],
+  "trigger_negative": [
+    {
+      "id": "tn-1",
+      "kind": "unrelated",
+      "prompt": "Review this PR for security issues — it touches our auth middleware.",
+      "expected_adjacent_skill": "security-and-hardening",
+      "rationale": "Reviewing code for correctness/security content, not documenting a change's reasoning."
+    },
+    {
+      "id": "tn-2",
+      "kind": "unrelated",
+      "prompt": "Help me build a project schedule for next quarter's roadmap.",
+      "expected_adjacent_skill": "swebok-management",
+      "rationale": "Project planning, unrelated to writing commit/PR documentation."
+    },
+    {
+      "id": "tn-3",
+      "kind": "near_miss",
+      "prompt": "Our checkout webhook has silently dropped events three times this month. Why does this keep happening?",
+      "expected_adjacent_skill": "failure-mode-classification",
+      "rationale": "change-documentation-rigor's own text draws this exact boundary: failure-mode-classification cites change-documentation-rigor's 'keep exploratory iteration out of the public PR queue' as the same instinct applied to investigating a recurring bug — the investigation-naming skill, not the documentation skill, owns this prompt."
+    },
+    {
+      "id": "tn-4",
+      "kind": "near_miss",
+      "prompt": "Before we build anything, can you cluster these support tickets and tell us if there are natural groupings we should design around?",
+      "expected_adjacent_skill": "desk-research",
+      "rationale": "change-documentation-rigor's own text names this boundary directly: it applies once a data-driven question 'moves from what does the data show to build the feature this analysis justified' — this prompt is still squarely in the 'what does the data show' phase, which is desk-research's territory."
+    }
+  ],
+  "quality": [
+    {
+      "id": "q-1",
+      "prompt": "I just ran a scheduled dependency sweep and bumped 12 npm packages. 10 went fine. 2 (react-pdf and a transitive peer of it) I left alone because bumping them broke 3 tests with behavior-changing output on PDF rendering. Write the commit message for this sweep.",
+      "notes": "Exercises the batch/mechanical-change section: packages grouped and named specifically (not \"updated dependencies\"), what was deliberately NOT changed and why, and a checkable verification claim."
+    },
+    {
+      "id": "q-2",
+      "prompt": "This repo has a native PR template at .github/pull_request_template.md with these sections: '## What changed', '## Why', '## How was this tested'. Write a PR description, using that template, for a fix where a null-check was missing on the shipping-address field, causing a crash on guest checkout for about 6 hours until a hotfix rolled out. I added a regression test and confirmed it fails on main and passes on this branch.",
+      "notes": "Exercises \"PR description: use the repo's own template first\" — a good response fills in the given native template completely rather than substituting the generic references/pr-template.md structure."
+    },
+    {
+      "id": "q-3",
+      "prompt": "This repo has no PR or merge-request template file anywhere in it. Write a PR description for a moderately sized change: replacing a hand-rolled date-parsing utility with a well-tested library, because the hand-rolled version mishandled DST transitions. I considered patching the existing utility instead but rejected it since the DST bug pattern kept recurring across three prior attempts. Verified via the existing date-utility test suite (all passing) plus a new DST-transition test.",
+      "notes": "Exercises the fallback to references/pr-template.md (Summary, Breaking change, Related issue, Problem statement, Solution, Major changes, Testing and review) since no native template exists, and exercises 'what was considered and rejected, and why.'"
+    },
+    {
+      "id": "q-4",
+      "prompt": "I fixed a typo in a docstring — one word was misspelled. Want a commit message for that.",
+      "notes": "Exercises \"When NOT to over-apply this\" — a proportionate response is a single clear sentence, not a full Problem Statement / Solution breakdown, but should still not fabricate an unstated verification claim."
+    }
+  ]
+}

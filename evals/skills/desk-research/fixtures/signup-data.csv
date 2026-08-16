@@ -1,0 +1,17 @@
+week,channel,spend_usd,signups,activated_within_7d
+1,paid_search,2000,140,62
+2,paid_search,2500,158,60
+3,paid_search,1800,121,58
+4,paid_search,3000,205,55
+5,paid_search,2200,150,61
+6,paid_search,2600,171,57
+7,paid_search,1900,127,63
+8,paid_search,3100,214,54
+1,content,500,40,88
+2,content,500,44,85
+3,content,600,52,90
+4,content,550,48,87
+5,content,700,61,89
+6,content,650,58,86
+7,content,600,53,91
+8,content,750,66,88

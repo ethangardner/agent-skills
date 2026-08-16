@@ -1,0 +1,82 @@
+{
+  "skill": "constructive-code-review",
+  "trigger_positive": [
+    {
+      "id": "tp-1",
+      "prompt": "Here's a diff, what do you think?\n\n```diff\n+function getDiscount(user, cart) {\n+  if (user.isPremium) return cart.total * 0.2;\n+  return 0;\n+}\n```",
+      "source_phrase": "\"Trigger even when the user just pastes a diff and asks 'what do you think'\""
+    },
+    {
+      "id": "tp-2",
+      "prompt": "How should I phrase this review comment? I think this function has a bug but I don't want to sound harsh about it.",
+      "source_phrase": "\"how should I phrase this review comment\""
+    },
+    {
+      "id": "tp-3",
+      "prompt": "Is this feedback too harsh? I wrote: 'this whole approach is wrong, redo it.'",
+      "source_phrase": "\"is this feedback too harsh/vague\""
+    },
+    {
+      "id": "tp-4",
+      "prompt": "Should I approve this PR? It's a contributor's first submission and I found a couple of issues.",
+      "source_phrase": "\"should I approve this\""
+    },
+    {
+      "id": "tp-5",
+      "prompt": "Can you review this pull request for me and draft the review comments?",
+      "source_phrase": "\"reviewing a pull request or patch from another person, drafting review comments\""
+    }
+  ],
+  "trigger_negative": [
+    {
+      "id": "tn-1",
+      "kind": "unrelated",
+      "prompt": "Can you find any bugs in this authentication middleware?",
+      "expected_adjacent_skill": "code-review-and-quality",
+      "rationale": "The skill's own description explicitly opts out of correctness/security/quality content review — 'as opposed to reviewing code for correctness/security/quality issues (use a code-quality-review skill for that content)'."
+    },
+    {
+      "id": "tn-2",
+      "kind": "unrelated",
+      "prompt": "Write a commit message for the fix I just made to the login rate limiter.",
+      "expected_adjacent_skill": "change-documentation-rigor",
+      "rationale": "Documenting a change, not phrasing feedback on someone else's contribution."
+    },
+    {
+      "id": "tn-3",
+      "kind": "near_miss",
+      "prompt": "Renovate just opened a PR bumping 6 transitive dependencies. Should I merge it?",
+      "expected_adjacent_skill": "low-risk-change-verification",
+      "rationale": "The skill's own text explicitly routes this case elsewhere: a dependency bump is 'mechanical but often carries real risk (supply-chain, transitive behavior change)... that class of change routes to low-risk-change-verification's transcript treatment instead.'"
+    },
+    {
+      "id": "tn-4",
+      "kind": "near_miss",
+      "prompt": "Review this proposed database schema for the new billing service — is this a good design? Here's the plan: separate `invoices` and `line_items` tables, invoices reference a denormalized customer snapshot rather than a live foreign key.",
+      "expected_adjacent_skill": "swebok-design",
+      "rationale": "Superficially a 'review this' request, but it targets a design proposal, not a code diff/patch from a contributor — constructive-code-review is scoped to phrasing feedback on someone's submitted code, not evaluating an architectural/schema design on its merits."
+    }
+  ],
+  "quality": [
+    {
+      "id": "q-1",
+      "prompt": "Review this diff from a first-time external contributor:\n\n```diff\n+// Retry up to 3 times with a 500ms delay if the upstream call fails.\n+// Added a test for the retry-exhaustion path since it wasn't covered before.\n+async function fetchWithRetry(url, attempts = 3) {\n+  for (let i = 0; i < attempts; i++) {\n+    try {\n+      return await fetch(url);\n+    } catch (e) {\n+      if (i === attempts - 1) throw e;\n+      await sleep(500);\n+    }\n+  }\n+}\n```\n\nOne issue I noticed myself: this doesn't distinguish a 4xx from a 5xx/network error, so it'll retry even on a request that will never succeed (e.g. a 400).",
+      "notes": "Exercises severity-labeling (D1), scenario-grounded feedback (D2) on the 4xx issue, credit-before-critique for the first-time contributor's added test/comments (D3), and decisive resolution (D6)."
+    },
+    {
+      "id": "q-2",
+      "prompt": "Review this: a config file changed one YAML value, `max_connections: 10` to `max_connections: 50`, no code changes.",
+      "notes": "Exercises calibrated depth (D5) — mechanical AND no behavior surface beyond the value itself is debatable (it does have a real behavior surface: connection pool sizing), so a good response should reason about whether this is genuinely the light-pass case or deserves more scrutiny, not reflexively treat 'short diff' as 'safe diff.'"
+    },
+    {
+      "id": "q-3",
+      "prompt": "Draft review comments for this PR: it adds a new public API endpoint `DELETE /api/users/:id` with no changes to authorization checks elsewhere in the file — the file already has an `requireAdmin` middleware applied at the router level, but I can't tell from this diff alone whether that's still wired up correctly for the new route.",
+      "notes": "Exercises 'Route to the right person' (D4) and calibrated depth for a security-relevant, public-API change (D5) — this earns the full adversarial pass per the skill, and genuine uncertainty about the auth wiring should be phrased as a question, not asserted either way."
+    },
+    {
+      "id": "q-4",
+      "prompt": "Is this feedback too harsh? Diff: renames a local variable from `x` to `userCount`. My draft comment: 'This whole PR needs to be redone, the naming is a mess.'",
+      "notes": "Exercises severity-calibration on a genuinely trivial, low-risk change — the skill's own 'When NOT to over-apply this' + 'a review that never resolves to a decision is a cost with no benefit' argue the original comment is miscalibrated and should be softened or dropped, not escalated further."
+    }
+  ]
+}

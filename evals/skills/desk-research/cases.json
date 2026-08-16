@@ -1,0 +1,83 @@
+{
+  "skill": "desk-research",
+  "trigger_positive": [
+    {
+      "id": "tp-1",
+      "prompt": "Can you look into what the data shows before we commit to redesigning the onboarding flow?",
+      "source_phrase": "\"look into what the data shows\""
+    },
+    {
+      "id": "tp-2",
+      "prompt": "Can you cluster and segment this dataset of support tickets by topic?",
+      "source_phrase": "\"cluster/segment this dataset\""
+    },
+    {
+      "id": "tp-3",
+      "prompt": "Correlate marketing spend with signup volume for the last two quarters.",
+      "source_phrase": "\"correlate X with Y\""
+    },
+    {
+      "id": "tp-4",
+      "prompt": "Before we decide on a rewrite, can you explore this and see if it's actually justified?",
+      "source_phrase": "\"explore this before we decide\""
+    },
+    {
+      "id": "tp-5",
+      "prompt": "Can you just analyze this CSV export of last month's API error logs?",
+      "source_phrase": "\"Trigger even when the ask is just 'analyze this CSV/log export'\""
+    }
+  ],
+  "trigger_negative": [
+    {
+      "id": "tn-1",
+      "kind": "unrelated",
+      "prompt": "Implement the client-side validation for the signup form's email field.",
+      "expected_adjacent_skill": null,
+      "rationale": "Production feature work, explicitly excluded by the skill's own description (\"rather than production feature work or newly-collected data\")."
+    },
+    {
+      "id": "tn-2",
+      "kind": "unrelated",
+      "prompt": "Write a commit message for the fix I made to the nightly ETL job that populates the analytics warehouse.",
+      "expected_adjacent_skill": "change-documentation-rigor",
+      "rationale": "Documenting a code change, not answering a question from existing data."
+    },
+    {
+      "id": "tn-3",
+      "kind": "near_miss",
+      "prompt": "We already know from last month's analysis that there are three distinct user segments. Write the PR description for the segmentation-based onboarding feature we just shipped based on that.",
+      "expected_adjacent_skill": "change-documentation-rigor",
+      "rationale": "The skill's own text draws this exact boundary: once the question moves from 'what does the data show' to 'build the feature this analysis justified,' change-documentation-rigor applies instead of desk-research's 'preserve the trail' instinct."
+    },
+    {
+      "id": "tn-4",
+      "kind": "near_miss",
+      "prompt": "How do I know if the correlation I found is statistically significant? Explain p-values and confidence intervals to me.",
+      "expected_adjacent_skill": "swebok-math-foundations",
+      "rationale": "A plausible confusion (both statistics-adjacent), but this asks for an explanation of a statistical concept, not for existing data to be investigated to answer a decision-relevant question."
+    }
+  ],
+  "quality": [
+    {
+      "id": "q-1",
+      "prompt": "Here's 8 weeks of signup data across our two acquisition channels, paid_search and content. Before we decide whether to shift more budget toward content, what does this data show about which channel drives better signups and activation?",
+      "fixture": "fixtures/signup-data.csv",
+      "notes": "Exercises philosophy point 4 (state the decision the research informs), point 3 (corroborate/note limits of a single internal dataset), and workflow steps 1, 2, 7. No inherent tunable parameter here, so philosophy point 2 (search free parameters) is not applicable to this case."
+    },
+    {
+      "id": "q-2",
+      "prompt": "We're deciding whether to build our own feature-flag system or adopt an off-the-shelf one (e.g. LaunchDarkly, Unleash). Before we build anything, do the desk research on this.",
+      "notes": "Exercises the inventory-and-comparative-analysis shape (matching references/worked-example-inventory-analysis.md): inventory current/internal flag usage first, then a named-axis comparison against external options, ending in a recorded, amendable decision rather than a vague survey."
+    },
+    {
+      "id": "q-3",
+      "prompt": "Our onboarding doc already documents exactly why we chose Postgres over MongoDB three years ago, with the tradeoffs spelled out in detail. Can you look into whether we should switch databases?",
+      "notes": "Exercises \"When NOT to over-apply this\" plus workflow step 2 (inventory what already exists before collecting anything new) — a good response checks/reuses the existing documented rationale first rather than mounting a fresh investigation from scratch, and says explicitly if the existing doc already answers the question."
+    },
+    {
+      "id": "q-4",
+      "prompt": "I ran a clustering pass on our URL list and grouped them into 6 clusters by path pattern. Can you write up the research findings?",
+      "notes": "Exercises philosophy points 2 and 3 directly — the prompt's own phrasing ('grouped into 6 clusters') is the exact anti-pattern the skill names ('\"grouped into 6 clusters\" is not [checkable]'); a good response asks for or flags the missing parameter search (why 6, not some other k) and the missing independent-signal validation before presenting the grouping as a trustworthy finding."
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "skill": "swebok-process",
+  "trigger_positive": [
+    {
+      "id": "tp-1",
+      "prompt": "How should we structure our development process for the new team? We've never written one down.",
+      "source_phrase": "\"how should we structure our development process\" (explicit trigger-even-when clause)"
+    },
+    {
+      "id": "tp-2",
+      "prompt": "Should we use waterfall or agile for this project? The team is split on it.",
+      "source_phrase": "\"waterfall vs agile\" / \"should we use waterfall or agile\""
+    },
+    {
+      "id": "tp-3",
+      "prompt": "We want to do a process improvement push next quarter — where do we even start with a process assessment?",
+      "source_phrase": "\"process improvement\", \"process assessment\""
+    },
+    {
+      "id": "tp-4",
+      "prompt": "Leadership wants us to pursue a CMMI maturity target this year. What does that actually involve for how we work day to day?",
+      "source_phrase": "\"CMMI\", \"process maturity\""
+    },
+    {
+      "id": "tp-5",
+      "prompt": "We're adopting Scrum but want to skip standups and keep two-week sprints — how do we document that as a deliberate process tailoring decision instead of just winging it?",
+      "source_phrase": "\"process tailoring\""
+    }
+  ],
+  "trigger_negative": [
+    {
+      "id": "tn-1",
+      "kind": "unrelated",
+      "prompt": "Can you write unit tests for this date-parsing function?",
+      "expected_adjacent_skill": null,
+      "rationale": "Construction-level task, not a lifecycle/process question."
+    },
+    {
+      "id": "tn-2",
+      "kind": "unrelated",
+      "prompt": "Explain what a hash map is and when I'd use one instead of an array.",
+      "expected_adjacent_skill": "swebok-computing-foundations",
+      "rationale": "Data-structure concept, unrelated to process/lifecycle selection."
+    },
+    {
+      "id": "tn-3",
+      "kind": "near_miss",
+      "prompt": "Help me build a project schedule and estimate the effort needed for this quarter's roadmap.",
+      "expected_adjacent_skill": "swebok-management",
+      "rationale": "Scheduling/estimation is project management (SWEBOK Ch.9), a distinct discipline from lifecycle model selection (Ch.10) even though swebok-process's own text cross-references swebok-management for GQM."
+    },
+    {
+      "id": "tn-4",
+      "kind": "near_miss",
+      "prompt": "Define our Git branching strategy and release train cadence for the monorepo.",
+      "expected_adjacent_skill": "swebok-configuration-management",
+      "rationale": "Branching/release strategy is configuration management (Ch.8), not lifecycle-model selection — a plausible confusion since both are process-adjacent."
+    }
+  ],
+  "quality": [
+    {
+      "id": "q-1",
+      "scenario_mode": "definition",
+      "prompt": "We're kicking off a new internal tool for a 4-person co-located team. Requirements are well understood and stable, criticality is low (internal use only, no safety/regulatory concerns), and our product owner is available for feedback every day. Help us define our development process.",
+      "notes": "Exercises D1-D5 in definition mode. Given stable requirements + low criticality + daily stakeholder availability, a good response should reason toward an appropriate model rather than defaulting to agile by habit — waterfall/incremental are also defensible given stable requirements; the key test is that the choice is justified against the stated characterization (D2), not asserted."
+    },
+    {
+      "id": "q-2",
+      "scenario_mode": "definition",
+      "prompt": "We're building firmware for a Class II medical device that will need IEC 62304 certification. The team is 15 people across 3 time zones, requirements need to be locked and traceable before implementation begins, and defects can cause patient harm. Define our process.",
+      "notes": "Exercises D2 as make-or-break — the characterization (regulatory certification, safety-critical, requirements locked upfront) should drive the response toward V-model or waterfall with certification-oriented tailoring, not agile chosen by default or popularity."
+    },
+    {
+      "id": "q-3",
+      "scenario_mode": "review",
+      "prompt": "Review this process description: We do two-week sprints. Nobody remembers exactly why we picked Scrum over Kanban at this point. Tickets move from 'To Do' to 'In Progress' to 'Done' with no written definition of when something is allowed to move between those columns. We hold a retro every sprint, people share what went wrong, and then we move on to the next sprint.",
+      "notes": "Exercises checklist mode (C1-C9). A good review leads with the highest-leverage gap (per the skill's explicit instruction) rather than reciting all 8 questions in order, and should flag at minimum: undocumented model-choice rationale, missing entry/exit criteria, and retrospectives that produce no owned action items."
+    },
+    {
+      "id": "q-4",
+      "scenario_mode": "definition",
+      "prompt": "I'm a solo developer building a personal side project on weekends. Do I need to write up a formal development process for this?",
+      "notes": "Exercises the skill's own \"When NOT to over-apply this\" section — a good response recognizes the solo/hobby context, explicitly states the scaling decision (not silently defaulting to either extreme), and does not produce the full heavyweight Output-format template."
+    }
+  ]
+}

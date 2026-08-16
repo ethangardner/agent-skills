@@ -1,0 +1,82 @@
+{
+  "skill": "failure-mode-classification",
+  "trigger_positive": [
+    {
+      "id": "tp-1",
+      "prompt": "Why does this keep happening? We've now seen the checkout webhook silently drop events three times this month, always right after a deploy.",
+      "source_phrase": "\"why does this keep happening\""
+    },
+    {
+      "id": "tp-2",
+      "prompt": "Can you diagnose this incident? Users are intermittently seeing stale profile data, and I have a feeling we've hit something like this before.",
+      "source_phrase": "\"diagnose this incident\" / \"is this the same bug as before\""
+    },
+    {
+      "id": "tp-3",
+      "prompt": "I need to write the fix PR for this flaky S3 upload retry bug — it's happened twice now with different stack traces each time.",
+      "source_phrase": "\"writing a fix PR for an intermittent or hard-to-reproduce bug\""
+    },
+    {
+      "id": "tp-4",
+      "prompt": "This has only happened once so far, but it looks like a classic retry-exhaustion pattern — the job silently drops after 3 attempts with no terminal write. Worth doing anything before just patching it?",
+      "source_phrase": "single-occurrence clause: \"Trigger even when only one occurrence has been confirmed so far, if the failure class (retries, races, external-service flakiness, partial writes) is the kind that's likely to recur\""
+    },
+    {
+      "id": "tp-5",
+      "prompt": "What's causing these failures? Our nightly batch job has failed 4 times in the last two weeks, each with a different error message.",
+      "source_phrase": "\"what's causing these failures\""
+    }
+  ],
+  "trigger_negative": [
+    {
+      "id": "tn-1",
+      "kind": "unrelated",
+      "prompt": "Can you help me write unit tests for this new date-formatting utility function?",
+      "expected_adjacent_skill": null,
+      "rationale": "Greenfield test-writing, no failure to investigate."
+    },
+    {
+      "id": "tn-2",
+      "kind": "unrelated",
+      "prompt": "Write a commit message for the lodash version bump I just made.",
+      "expected_adjacent_skill": "change-documentation-rigor",
+      "rationale": "Documentation of a change, not investigation of a recurring failure."
+    },
+    {
+      "id": "tn-3",
+      "kind": "near_miss",
+      "prompt": "We need to change how the retry logic works in the payment service — walk me through the impact analysis before I touch it.",
+      "expected_adjacent_skill": "swebok-maintenance",
+      "rationale": "Impact-analysis-before-changing-code is explicitly assigned to swebok-maintenance in this skill's own \"Relationship to broader maintenance/operations discipline\" section."
+    },
+    {
+      "id": "tn-4",
+      "kind": "near_miss",
+      "prompt": "Our on-call runbook for payment webhook failures is stale — help me rewrite the incident response steps and escalation policy.",
+      "expected_adjacent_skill": "swebok-operations",
+      "rationale": "Incident process/runbooks/SLAs at the organizational level are explicitly assigned to swebok-operations in this skill's own \"Relationship to broader maintenance/operations discipline\" section."
+    }
+  ],
+  "quality": [
+    {
+      "id": "q-1",
+      "prompt": "Our payment webhook handler has silently dropped events three separate times over the last two months. Each time we just restarted the consumer and moved on. Here's what we know: the consumer calls `repository.update()` on the webhook-status record after processing, but on closer look that method issues a raw SQL UPDATE that bypasses the ORM's entity lifecycle hooks, so a change-tracking column never gets set. Investigate and get this ready to fix.",
+      "notes": "Exercises D1 (stable name + taxonomy location), D2 (mechanism, not symptom — mechanism is given, response must use it), D3 (investigation vs. clean fix)."
+    },
+    {
+      "id": "q-2",
+      "prompt": "I found a typo in a hardcoded URL that broke image uploads for about an hour before I caught it and fixed it in the same commit. Anything else needed before I ship this?",
+      "notes": "Exercises D4 restraint — correct answer is that no taxonomy entry is needed for a genuinely one-off, already-fixed typo."
+    },
+    {
+      "id": "q-3",
+      "prompt": "Two bug reports came in this week: one says 'cart total is wrong after a coupon is applied', the other says 'checkout total doesn't match cart total'. Are these the same failure mode, and how should I track that?",
+      "notes": "Exercises D1+D2 — must reason about mechanism identity, not just symptom-text similarity, before deciding whether to reuse or create a taxonomy entry."
+    },
+    {
+      "id": "q-4",
+      "prompt": "Our job queue has failed 5 times in the last month, each with a different stack trace, and we genuinely don't know why yet. Help me investigate and land a fix.",
+      "notes": "Exercises D3 specifically — mechanism is NOT yet known, so a good response proposes a throwaway/scratch investigation step distinct from a clean, already-verified fix, rather than presenting speculative reasoning as the final artifact."
+    }
+  ]
+}
