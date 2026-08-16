@@ -1,7 +1,5 @@
-import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { AbstractHarness } from "./abstract-harness.js";
-import { MockHarness } from "./mock-harness.js";
 import {
   REPO_ROOT,
   EVALS_DIR,
@@ -10,13 +8,13 @@ import {
   lastJsonValue,
   loadSkillContent,
   renderJudgePrompt,
+  readCachedFile,
 } from "../runner-lib.js";
 
 export class ClaudeHarness extends AbstractHarness {
-  async runTriggerCase(prompt, options = {}) {
-    if (options.mock || this.options.mock) {
-      return new MockHarness(this.options).runTriggerCase(prompt, { ...options, harnessLabel: "Claude" });
-    }
+  static label = "Claude";
+
+  async _runTriggerCase(prompt, options = {}) {
     const budget = options.budget ?? this.options.budget ?? 0.25;
     const model = options.model ?? this.options.model;
     const flags = [
@@ -56,10 +54,7 @@ export class ClaudeHarness extends AbstractHarness {
     };
   }
 
-  async runQualityCase(slug, prompt, options = {}) {
-    if (options.mock || this.options.mock) {
-      return new MockHarness(this.options).runQualityCase(slug, prompt, { ...options, harnessLabel: "Claude" });
-    }
+  async _runQualityCase(slug, prompt, options = {}) {
     const budget = options.budget ?? this.options.budget ?? 0.75;
     const model = options.model ?? this.options.model;
     const tools = options.tools ?? "Read,Write,Edit,Bash,Grep,Glob";
@@ -91,16 +86,10 @@ export class ClaudeHarness extends AbstractHarness {
     };
   }
 
-  async runJudge(rubric, scenarioPrompt, transcript, options = {}) {
-    if (options.mock || this.options.mock) {
-      return new MockHarness(this.options).runJudge(rubric, scenarioPrompt, transcript, {
-        ...options,
-        harnessLabel: "Claude",
-      });
-    }
+  async _runJudge(rubric, scenarioPrompt, transcript, options = {}) {
     const budget = options.budget ?? this.options.budget ?? 0.2;
     const judgeModel = options.judgeModel ?? this.options.judgeModel ?? "haiku";
-    const schema = await readFile(path.join(EVALS_DIR, "lib", "judge-result.schema.json"), "utf8");
+    const schema = await readCachedFile(path.join(EVALS_DIR, "lib", "judge-result.schema.json"));
     const rendered = await renderJudgePrompt(rubric, scenarioPrompt, transcript);
     const flags = [
       "-p",

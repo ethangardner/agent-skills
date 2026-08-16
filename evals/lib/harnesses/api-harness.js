@@ -1,13 +1,15 @@
 import { AbstractHarness } from "./abstract-harness.js";
-import { MockHarness } from "./mock-harness.js";
 import {
   lastJsonValue,
   loadSkillContent,
   extractFiredSkillsFromText,
   renderJudgePrompt,
+  resolveJudgeModel,
 } from "../runner-lib.js";
 
 export class ApiHarness extends AbstractHarness {
+  static label = "API";
+
   constructor(options = {}) {
     super(options);
     this.endpoint = options.endpoint || process.env.OPENAI_BASE_URL || "http://localhost:11434/v1";
@@ -36,10 +38,7 @@ export class ApiHarness extends AbstractHarness {
     return await response.json();
   }
 
-  async runTriggerCase(prompt, options = {}) {
-    if (options.mock || this.options.mock) {
-      return new MockHarness(this.options).runTriggerCase(prompt, { ...options, harnessLabel: "API" });
-    }
+  async _runTriggerCase(prompt, options = {}) {
     const model = options.model ?? this.options.model ?? "qwen2.5-coder:7b";
     const payload = {
       model,
@@ -109,10 +108,7 @@ export class ApiHarness extends AbstractHarness {
     };
   }
 
-  async runQualityCase(slug, prompt, options = {}) {
-    if (options.mock || this.options.mock) {
-      return new MockHarness(this.options).runQualityCase(slug, prompt, { ...options, harnessLabel: "API" });
-    }
+  async _runQualityCase(slug, prompt, options = {}) {
     const model = options.model ?? this.options.model ?? "qwen2.5-coder:7b";
     const skillContent = await loadSkillContent(slug);
 
@@ -145,14 +141,8 @@ export class ApiHarness extends AbstractHarness {
     };
   }
 
-  async runJudge(rubric, scenarioPrompt, transcript, options = {}) {
-    if (options.mock || this.options.mock) {
-      return new MockHarness(this.options).runJudge(rubric, scenarioPrompt, transcript, {
-        ...options,
-        harnessLabel: "API",
-      });
-    }
-    const judgeModel = options.judgeModel ?? options.model ?? this.options.judgeModel ?? this.options.model ?? "gemini-2.0-flash";
+  async _runJudge(rubric, scenarioPrompt, transcript, options = {}) {
+    const judgeModel = resolveJudgeModel(options, this.options, "gemini-2.0-flash");
     const rendered = await renderJudgePrompt(rubric, scenarioPrompt, transcript);
 
     const payload = {

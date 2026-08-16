@@ -221,3 +221,9 @@ __marimo__/
 
 # Evals
 evals/results/
+
+# Junie-generated noise, removed from the repo — junie writes these
+# unprompted (PROCESS.md was invented outright during an eval run, see
+# evals/README.md; .junie/plans/ is junie's own planning-session scratch).
+/PROCESS.md
+/.junie/plans/

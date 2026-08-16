@@ -70,9 +70,29 @@ export async function withSandboxDir(fn) {
   }
 }
 
-export async function gitShortSha() {
-  const { stdout } = await spawnCollect("git", ["rev-parse", "--short", "HEAD"]);
-  return stdout.trim() || "nogit";
+let gitShortShaPromise = null;
+
+// The SHA can't change mid-run, so cache the (in-flight) promise rather than
+// re-spawning `git rev-parse` once per skill.
+export function gitShortSha() {
+  if (!gitShortShaPromise) {
+    gitShortShaPromise = spawnCollect("git", ["rev-parse", "--short", "HEAD"]).then(
+      ({ stdout }) => stdout.trim() || "nogit"
+    );
+  }
+  return gitShortShaPromise;
+}
+
+const fileCache = new Map();
+
+// Caches the in-flight read promise (not just the resolved value) so
+// concurrent first callers under pMapLimit share one read instead of racing
+// duplicate reads of the same static file.
+export function readCachedFile(filePath) {
+  if (!fileCache.has(filePath)) {
+    fileCache.set(filePath, readFile(filePath, "utf8"));
+  }
+  return fileCache.get(filePath);
 }
 
 export function parseNdjson(stdout) {
@@ -117,13 +137,51 @@ export function extractFiredSkillsFromText(text) {
   return firedSkills;
 }
 
+// The loosest tier of judge-JSON extraction: pull a `{"verdict": ...}`-shaped
+// object out of free text via brace matching. Shared verbatim by junie and
+// opencode, whose outer extraction strategies otherwise differ.
+export function extractJudgeJsonFromBraces(text) {
+  const match = typeof text === "string" ? text.match(/\{[\s\S]*"verdict"[\s\S]*\}/) : null;
+  if (!match) return null;
+  try {
+    return JSON.parse(match[0]);
+  } catch {
+    return null;
+  }
+}
+
+// Pulls a judge-result JSON object out of a CLI's free-text stdout: a direct
+// JSON.parse of the whole text, then a fenced ```json code block, then a
+// loose brace match. Used by harnesses without schema-constrained output.
+export function extractJudgeJsonFromText(text) {
+  if (!text) return null;
+  try {
+    return JSON.parse(text);
+  } catch {
+    // fall through to looser extraction below
+  }
+  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fenced) {
+    try {
+      return JSON.parse(fenced[1]);
+    } catch {
+      // fall through
+    }
+  }
+  return extractJudgeJsonFromBraces(text);
+}
+
+// options.judgeModel/options.model take priority over the harness's own
+// configured defaults, which take priority over a harness-supplied fallback.
+export function resolveJudgeModel(options, harnessOptions, fallback) {
+  return options.judgeModel ?? options.model ?? harnessOptions.judgeModel ?? harnessOptions.model ?? fallback;
+}
+
 async function stripFrontmatter(md) {
   return md.replace(/^---\n[\s\S]*?\n---\n/, "");
 }
 
-/** Concatenates a skill's SKILL.md (frontmatter stripped) with any
- * references/*.md files, for direct injection via --append-system-prompt. */
-export async function loadSkillContent(slug) {
+async function buildSkillContent(slug) {
   const skillDir = path.join(REPO_ROOT, "skills", slug);
   const skillMd = await readFile(path.join(skillDir, "SKILL.md"), "utf8");
   let content = await stripFrontmatter(skillMd);
@@ -140,6 +198,19 @@ export async function loadSkillContent(slug) {
   return content;
 }
 
+const skillContentCache = new Map();
+
+/** Concatenates a skill's SKILL.md (frontmatter stripped) with any
+ * references/*.md files, for direct injection via --append-system-prompt.
+ * Cached per slug — a skill's files are static for the run's lifetime, and
+ * this is called once per quality case. */
+export function loadSkillContent(slug) {
+  if (!skillContentCache.has(slug)) {
+    skillContentCache.set(slug, buildSkillContent(slug));
+  }
+  return skillContentCache.get(slug);
+}
+
 // Harnesses without schema-constrained output (junie, opencode) append this
 // to the rendered judge prompt to ask for JSON in plain text instead.
 export const JUDGE_JSON_INSTRUCTION =
@@ -149,7 +220,7 @@ export const JUDGE_JSON_INSTRUCTION =
  * and transcript for a quality-case judging pass. Shared by every harness's
  * runJudge. */
 export async function renderJudgePrompt(rubric, scenarioPrompt, transcript) {
-  const template = await readFile(path.join(EVALS_DIR, "lib", "judge-prompt.md"), "utf8");
+  const template = await readCachedFile(path.join(EVALS_DIR, "lib", "judge-prompt.md"));
   return template
     .replace("{{RUBRIC}}", rubric)
     .replace("{{SCENARIO_PROMPT}}", scenarioPrompt)

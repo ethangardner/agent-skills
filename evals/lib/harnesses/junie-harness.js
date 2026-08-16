@@ -1,12 +1,13 @@
 import path from "node:path";
 import { AbstractHarness } from "./abstract-harness.js";
-import { MockHarness } from "./mock-harness.js";
 import {
   REPO_ROOT,
   spawnCollect,
   parseNdjson,
   loadSkillContent,
   renderJudgePrompt,
+  extractJudgeJsonFromText,
+  resolveJudgeModel,
   JUDGE_JSON_INSTRUCTION,
   withSandboxDir,
 } from "../runner-lib.js";
@@ -55,37 +56,10 @@ function sumJunieCost(resultEvent) {
   return usage.reduce((sum, m) => sum + (typeof m?.cost === "number" ? m.cost : 0), 0);
 }
 
-function extractJudgeJson(text) {
-  if (!text) return null;
-  try {
-    return JSON.parse(text);
-  } catch {
-    // fall through to looser extraction below
-  }
-  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
-  if (fenced) {
-    try {
-      return JSON.parse(fenced[1]);
-    } catch {
-      // fall through
-    }
-  }
-  const braced = text.match(/\{[\s\S]*"verdict"[\s\S]*\}/);
-  if (braced) {
-    try {
-      return JSON.parse(braced[0]);
-    } catch {
-      // give up, caller treats null as JUDGE_ERROR
-    }
-  }
-  return null;
-}
-
 export class JunieHarness extends AbstractHarness {
-  async runTriggerCase(prompt, options = {}) {
-    if (options.mock || this.options.mock) {
-      return new MockHarness(this.options).runTriggerCase(prompt, { ...options, harnessLabel: "Junie" });
-    }
+  static label = "Junie";
+
+  async _runTriggerCase(prompt, options = {}) {
     const model = options.model ?? this.options.model;
     const bin = options.bin ?? this.options.bin ?? "junie";
 
@@ -106,10 +80,7 @@ export class JunieHarness extends AbstractHarness {
     });
   }
 
-  async runQualityCase(slug, prompt, options = {}) {
-    if (options.mock || this.options.mock) {
-      return new MockHarness(this.options).runQualityCase(slug, prompt, { ...options, harnessLabel: "Junie" });
-    }
+  async _runQualityCase(slug, prompt, options = {}) {
     const model = options.model ?? this.options.model;
     const bin = options.bin ?? this.options.bin ?? "junie";
     const skillContent = await loadSkillContent(slug);
@@ -132,14 +103,8 @@ export class JunieHarness extends AbstractHarness {
     });
   }
 
-  async runJudge(rubric, scenarioPrompt, transcript, options = {}) {
-    if (options.mock || this.options.mock) {
-      return new MockHarness(this.options).runJudge(rubric, scenarioPrompt, transcript, {
-        ...options,
-        harnessLabel: "Junie",
-      });
-    }
-    const model = options.judgeModel ?? options.model ?? this.options.judgeModel ?? this.options.model;
+  async _runJudge(rubric, scenarioPrompt, transcript, options = {}) {
+    const model = resolveJudgeModel(options, this.options);
     const bin = options.bin ?? this.options.bin ?? "junie";
     const rendered = await renderJudgePrompt(rubric, scenarioPrompt, transcript);
     const fullPrompt = `${rendered}\n\n${JUDGE_JSON_INSTRUCTION}`;
@@ -151,7 +116,7 @@ export class JunieHarness extends AbstractHarness {
 
       const { stdout, stderr, code } = await spawnCollect(bin, args, { cwd: projectDir });
       const { result } = parseNdjson(stdout);
-      const judgeOutput = extractJudgeJson(result?.result ?? stdout);
+      const judgeOutput = extractJudgeJsonFromText(result?.result ?? stdout);
 
       return {
         judgeOutput,

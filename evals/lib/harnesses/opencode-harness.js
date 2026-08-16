@@ -1,20 +1,20 @@
 import { AbstractHarness } from "./abstract-harness.js";
-import { MockHarness } from "./mock-harness.js";
 import {
   spawnCollect,
   lastJsonValue,
   loadSkillContent,
   extractFiredSkillsFromText,
+  extractJudgeJsonFromBraces,
   renderJudgePrompt,
+  resolveJudgeModel,
   JUDGE_JSON_INSTRUCTION,
   withSandboxDir,
 } from "../runner-lib.js";
 
 export class OpenCodeHarness extends AbstractHarness {
-  async runTriggerCase(prompt, options = {}) {
-    if (options.mock || this.options.mock) {
-      return new MockHarness(this.options).runTriggerCase(prompt, { ...options, harnessLabel: "OpenCode" });
-    }
+  static label = "OpenCode";
+
+  async _runTriggerCase(prompt, options = {}) {
     const model = options.model ?? this.options.model;
     const bin = options.bin ?? this.options.bin ?? "opencode";
 
@@ -34,10 +34,7 @@ export class OpenCodeHarness extends AbstractHarness {
     });
   }
 
-  async runQualityCase(slug, prompt, options = {}) {
-    if (options.mock || this.options.mock) {
-      return new MockHarness(this.options).runQualityCase(slug, prompt, { ...options, harnessLabel: "OpenCode" });
-    }
+  async _runQualityCase(slug, prompt, options = {}) {
     const model = options.model ?? this.options.model;
     const bin = options.bin ?? this.options.bin ?? "opencode";
     const skillContent = await loadSkillContent(slug);
@@ -59,14 +56,8 @@ export class OpenCodeHarness extends AbstractHarness {
     });
   }
 
-  async runJudge(rubric, scenarioPrompt, transcript, options = {}) {
-    if (options.mock || this.options.mock) {
-      return new MockHarness(this.options).runJudge(rubric, scenarioPrompt, transcript, {
-        ...options,
-        harnessLabel: "OpenCode",
-      });
-    }
-    const model = options.judgeModel ?? options.model ?? this.options.judgeModel ?? this.options.model;
+  async _runJudge(rubric, scenarioPrompt, transcript, options = {}) {
+    const model = resolveJudgeModel(options, this.options);
     const bin = options.bin ?? this.options.bin ?? "opencode";
     const rendered = await renderJudgePrompt(rubric, scenarioPrompt, transcript);
     const fullPrompt = `${rendered}\n\n${JUDGE_JSON_INSTRUCTION}`;
@@ -79,14 +70,7 @@ export class OpenCodeHarness extends AbstractHarness {
       const { stdout, stderr, code } = await spawnCollect(bin, args, { cwd: projectDir });
       let judgeOutput = lastJsonValue(stdout);
       if (!judgeOutput || typeof judgeOutput !== "object" || !judgeOutput.verdict) {
-        const jsonMatch = stdout.match(/\{[\s\S]*"verdict"[\s\S]*\}/);
-        if (jsonMatch) {
-          try {
-            judgeOutput = JSON.parse(jsonMatch[0]);
-          } catch {
-            // keep null
-          }
-        }
+        judgeOutput = extractJudgeJsonFromBraces(stdout) ?? judgeOutput;
       }
 
       return {

@@ -12,10 +12,10 @@ was no test/eval infrastructure in this repo before this — see
 `--tools`-style restriction flag (unlike `claude -p --tools Skill`, which
 is genuinely read-only on trigger cases). Left pointed at this repo, they
 will treat an eval prompt as a real task and write files for real — this
-happened during development: a junie run rewrote `PROCESS.md` and invented
-several unrelated files (a changelog, a runbook, fabricated research docs)
-directly in this checkout, because it was invoked with `cwd`/`--project`
-defaulting to `REPO_ROOT`. `JunieHarness` and `OpenCodeHarness` now wrap
+happened during development: a junie run rewrote an existing markdown file
+and invented several unrelated files (a changelog, a runbook, fabricated
+research docs) directly in this checkout, because it was invoked with
+`cwd`/`--project` defaulting to `REPO_ROOT`. `JunieHarness` and `OpenCodeHarness` now wrap
 every call in `withSandboxDir()` (`evals/lib/runner-lib.js`), which spawns
 the CLI against a fresh `mkdtemp` scratch directory (`--project
 <scratch-dir>` for junie; `cwd: <scratch-dir>` for opencode, unconfirmed

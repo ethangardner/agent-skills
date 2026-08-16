@@ -1,6 +1,8 @@
-import { AbstractHarness } from "./abstract-harness.js";
+export class MockHarness {
+  constructor(options = {}) {
+    this.options = options;
+  }
 
-export class MockHarness extends AbstractHarness {
   async runTriggerCase(prompt, options = {}) {
     const firedSkills = [];
     if (options.slug && !options.isNegative) {
