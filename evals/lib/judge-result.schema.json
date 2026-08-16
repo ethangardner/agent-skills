@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "required": ["verdict", "dimension_scores", "summary"],
+  "properties": {
+    "verdict": {
+      "type": "string",
+      "enum": ["pass", "fail"]
+    },
+    "dimension_scores": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["score", "rationale"],
+        "properties": {
+          "score": { "type": "integer", "minimum": 0, "maximum": 2 },
+          "rationale": { "type": "string" }
+        }
+      }
+    },
+    "summary": { "type": "string" }
+  }
+}

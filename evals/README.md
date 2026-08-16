@@ -6,36 +6,79 @@ and does following its instructions actually produce good output? There
 was no test/eval infrastructure in this repo before this — see
 `git log` for context if you're wondering why this looks new.
 
+## Filesystem isolation for agentic CLI harnesses
+
+`junie` and `opencode` are agentic CLIs with real file-write tools and no
+`--tools`-style restriction flag (unlike `claude -p --tools Skill`, which
+is genuinely read-only on trigger cases). Left pointed at this repo, they
+will treat an eval prompt as a real task and write files for real — this
+happened during development: a junie run rewrote `PROCESS.md` and invented
+several unrelated files (a changelog, a runbook, fabricated research docs)
+directly in this checkout, because it was invoked with `cwd`/`--project`
+defaulting to `REPO_ROOT`. `JunieHarness` and `OpenCodeHarness` now wrap
+every call in `withSandboxDir()` (`evals/lib/runner-lib.js`), which spawns
+the CLI against a fresh `mkdtemp` scratch directory (`--project
+<scratch-dir>` for junie; `cwd: <scratch-dir>` for opencode, unconfirmed
+whether opencode has its own equivalent `--project`-style flag since the
+CLI wasn't available to test against) and deletes it afterward. Skill
+discovery still works from an unrelated project dir since junie's
+`--skill-location` and opencode's `.agents/skills` discovery are both
+independent of the working/project directory. If you add a new harness
+for another agentic CLI, wrap its calls in `withSandboxDir()` too —
+`spawnCollect`'s `cwd` defaults to `REPO_ROOT`, which is safe for
+`claude -p` but not safe by default for anything with unrestricted file
+tools.
+
 ## Prerequisites
 
 - Node.js (the harness uses only built-in modules — no `npm install` needed).
 - For default runs: The `claude` CLI on `PATH`, logged in (OAuth/subscription auth).
 - For local or free-tier runs: OpenCode CLI, Ollama (e.g. `ollama run qwen2.5-coder:7b`), or an OpenAI-compatible endpoint (e.g., OpenRouter / Gemini Flash).
 - **For `--harness junie` or `--harness opencode`: the skills have to be visible to that CLI in the first place.**
-  Unlike the `claude` harness (which points `claude -p` at this repo directly via
-  `--plugin-dir`), `junie` and `opencode` discover skills from their own
-  conventional directories — `.junie/skills/` and `.agents/skills/`
-  respectively — not from `skills/` directly. This repo ships
-  `.junie/skills` and `.agents/skills` as symlinks to `../skills` so both
-  stay in sync with the canonical `skills/` tree automatically; if either
-  symlink is missing (e.g. a fresh clone before it's committed), trigger
-  recall for that harness will silently read as 0 for every case — the CLI
-  runs fine, it just has no skills to invoke. Confirm with e.g.
-  `junie --model sonnet --task "<a trigger prompt>" --output-format text`
-  and look for a `Read skill` step in the output before trusting a junie
-  eval run's trigger numbers.
-  - `JunieHarness` (`evals/lib/harnesses/junie-harness.js`) has been
-    verified against a live `junie` run: it uses `--output-format
+  The two CLIs are not symmetric here:
+  - `junie` has a native flag for pointing at an arbitrary skills
+    directory — `--skill-location <path>` — the same role `--plugin-dir`
+    plays for the `claude` harness. `JunieHarness`
+    (`evals/lib/harnesses/junie-harness.js`) passes
+    `--skill-location <repo>/skills` on every trigger case, so it reads
+    the canonical `skills/` tree directly. No symlink is needed or
+    shipped for junie. (Default skill locations, e.g. a user's own
+    `~/.junie/skills`, are still active alongside it — `junie` also
+    exposes `--skill-default-locations` to disable those, but unlike an
+    invalid `--model` value, an invalid `--skill-default-locations` value
+    didn't get rejected when tried against the live CLI, so its accepted
+    syntax couldn't be confirmed without spending a real call. If you want
+    to rule out ambient-skill contamination in trigger cases, work out the
+    right value yourself and wire it into `JunieHarness`.) Confirm the
+    `--skill-location` flag is actually working with e.g.
+    `junie --model sonnet --skill-location <repo>/skills --task "<a trigger prompt>" --output-format text`
+    and look for a `Read skill` step in the output before trusting a
+    junie eval run's trigger numbers. `JunieHarness` has been verified
+    against a live `junie` run this way: it uses `--output-format
     json-stream` and looks for `{"type":"step","name":"Read skill",...}`
     lines, which is junie's actual, confirmed fire signal (its plain-text
     output has no stable machine-readable marker for this).
-  - `OpenCodeHarness` (`evals/lib/harnesses/opencode-harness.js`) has
-    **not** been verified the same way (no `opencode` CLI was available to
-    test against) — it still scans raw stdout for `Skill(skill=...)`/
-    `"skill": "..."` patterns, the same approach that turned out to be
-    wrong for junie. Treat its trigger numbers as unconfirmed until someone
-    checks `opencode run "<a trigger prompt>"` output for what a skill
-    invocation actually looks like and updates the parser to match.
+  - `opencode` has **no equivalent flag or config key** — per opencode.ai's
+    own docs, it only discovers skills from a fixed set of conventional
+    directories: project-local `.opencode/skills/`, `.claude/skills/`,
+    `.agents/skills/` (walked up to the git worktree root), and their
+    global equivalents. This repo ships `.agents/skills` as a symlink to
+    `../skills` so it stays in sync with the canonical tree automatically
+    — that's not a repo-specific workaround, it's opencode's own
+    documented discovery mechanism, and there's currently no way to point
+    it at `skills/` without going through one of those three directory
+    names. If `.agents/skills` is ever missing (e.g. a fresh clone before
+    it's committed), trigger recall for `--harness opencode` will
+    silently read as 0 for every case — the CLI runs fine, it just has no
+    skills to invoke.
+    `OpenCodeHarness` (`evals/lib/harnesses/opencode-harness.js`) has
+    **not** been verified against a live run (no `opencode` CLI was
+    available to test against) — it still scans raw stdout for
+    `Skill(skill=...)`/`"skill": "..."` patterns, the same approach that
+    turned out to be wrong for junie. Treat its trigger numbers as
+    unconfirmed until someone checks `opencode run "<a trigger prompt>"`
+    output for what a skill invocation actually looks like and updates
+    the parser to match.
 
 ## Running
 
