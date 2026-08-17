@@ -5,11 +5,15 @@ description: >-
   exists (logs, usage analytics, public datasets) rather than production
   feature work or newly-collected data. Use when asked to "look into what
   the data shows", "cluster/segment this dataset", "correlate X with Y",
-  "explore this before we decide", "write a research notebook", "investigate
-  patterns in <dataset>", or any "before we build this, what does the data
-  say" request. Trigger even when the ask is just "analyze this CSV/log
-  export" — the discipline here is producing a defensible, checkable answer
-  and an honest trail of how you got there, not a polished feature.
+  "write a research notebook", "investigate patterns in <dataset>", or any
+  "before we build/decide/commit to X, what does the data say" request —
+  this includes both word orders, "explore this before we decide" and
+  "before we decide on a rewrite, can you explore this and see if it's
+  actually justified" alike; the pattern is looking at existing data before
+  committing to a build, regardless of which clause comes first. Trigger
+  even when the ask is just "analyze this CSV/log export" — the discipline
+  here is producing a defensible, checkable answer and an honest trail of
+  how you got there, not a polished feature.
 ---
 
 # Desk Research

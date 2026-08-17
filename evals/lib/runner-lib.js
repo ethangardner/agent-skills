@@ -123,15 +123,22 @@ export function lastJsonValue(stdout) {
 }
 
 // Matches a Skill-tool invocation in a CLI's free-text/JSON stdout, e.g.
-// `Skill(skill="foo")` or `"skill": "foo"`. Shared by harnesses (opencode,
-// api) whose CLI/API output has no structured tool-call event to read
-// instead.
+// `Skill(skill="foo")` or `"skill": "foo"`. Also matches opencode's actual
+// tool-log line, confirmed against a live run: `→ Skill "foo"` on stderr
+// (not stdout — callers should pass stdout+stderr combined). Shared by
+// harnesses (opencode, api) whose CLI/API output has no structured tool-call
+// event to read instead.
 export function extractFiredSkillsFromText(text) {
-  const regex = /(?:Skill\(skill=["']?([^"'\s\)]+)["']?\)|"skill"\s*:\s*["']([^"']+)["'])/g;
+  // Strip ANSI escape/color codes first — opencode wraps its "→ Skill "foo""
+  // tool-log line in reset codes (e.g. "\x1b[0m") that would otherwise sit
+  // directly against "Skill" and break the `(?:^|\s)Skill` anchor below.
+  const plain = typeof text === "string" ? text.replace(/\x1b\[[0-9;]*m/g, "") : text;
+  const regex =
+    /(?:Skill\(skill=["']?([^"'\s\)]+)["']?\)|"skill"\s*:\s*["']([^"']+)["']|(?:^|\s)Skill\s+["']([^"']+)["'])/g;
   const firedSkills = [];
   let match;
-  while ((match = regex.exec(text)) !== null) {
-    const skillName = (match[1] || match[2]).split(":").pop();
+  while ((match = regex.exec(plain)) !== null) {
+    const skillName = (match[1] || match[2] || match[3]).split(":").pop();
     if (!firedSkills.includes(skillName)) firedSkills.push(skillName);
   }
   return firedSkills;

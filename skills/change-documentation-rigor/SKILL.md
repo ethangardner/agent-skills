@@ -2,17 +2,20 @@
 name: change-documentation-rigor
 description: >-
   Write commit messages and PR descriptions that document the reasoning
-  behind a change, not just the change itself. Use this whenever you're about
-  to write a commit message, open a PR, or describe a diff — e.g. "write a
-  commit message for this", "describe this PR", "explain this dependency
-  bump", "write a changelog entry", "document this change", or any time you
-  finish a non-trivial diff and need to explain it to a reviewer. Trigger even
-  when the user just says "commit this" without asking for a message — a
-  one-line "fix bug" commit message is exactly the failure mode this skill
-  prevents. Applies especially to changes that look mechanical or low-risk on
-  the surface (dependency bumps, config tweaks, codemods), where the
-  temptation to skip explanation is highest and the cost of skipping it is
-  hidden until someone needs the history later.
+  behind a change, not just the change itself. Trigger on the bare,
+  unelaborated command alone — "commit this" or "commit these changes", with
+  no request for a message, no diff pasted, nothing else — that still means
+  write a proper commit message, not just run `git commit`; a one-line "fix
+  bug" message is exactly the failure mode this skill prevents. Also use this
+  whenever you're about to write a commit message, open a PR, or describe a
+  diff — e.g. "write a commit message for this", "describe this PR", "explain
+  this dependency bump" (including terse version-bump lines like "lodash
+  4.17.15 -> 4.17.21" with no other context), "write a changelog entry",
+  "document this change", or any time you finish a non-trivial diff and need
+  to explain it to a reviewer. Applies especially to changes that look
+  mechanical or low-risk on the surface (dependency bumps, config tweaks,
+  codemods), where the temptation to skip explanation is highest and the cost
+  of skipping it is hidden until someone needs the history later.
 ---
 
 # Change Documentation Rigor

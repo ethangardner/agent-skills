@@ -19,14 +19,14 @@ export class OpenCodeHarness extends AbstractHarness {
     const bin = options.bin ?? this.options.bin ?? "opencode";
 
     return withSandboxDir(async (projectDir) => {
-      const args = ["run"];
+      const args = ["run", "--dir", projectDir];
       if (model) args.push("--model", model);
       args.push(prompt);
 
       const { stdout, stderr, code } = await spawnCollect(bin, args, { cwd: projectDir });
 
       return {
-        firedSkills: extractFiredSkillsFromText(stdout),
+        firedSkills: extractFiredSkillsFromText(`${stdout}\n${stderr}`),
         cost: 0,
         processExitCode: code,
         stderr,
@@ -41,7 +41,7 @@ export class OpenCodeHarness extends AbstractHarness {
     const fullPrompt = `${skillContent}\n\n---\nUser prompt:\n${prompt}`;
 
     return withSandboxDir(async (projectDir) => {
-      const args = ["run"];
+      const args = ["run", "--dir", projectDir];
       if (model) args.push("--model", model);
       args.push(fullPrompt);
 
@@ -63,7 +63,7 @@ export class OpenCodeHarness extends AbstractHarness {
     const fullPrompt = `${rendered}\n\n${JUDGE_JSON_INSTRUCTION}`;
 
     return withSandboxDir(async (projectDir) => {
-      const args = ["run"];
+      const args = ["run", "--dir", projectDir];
       if (model) args.push("--model", model);
       args.push(fullPrompt);
 
