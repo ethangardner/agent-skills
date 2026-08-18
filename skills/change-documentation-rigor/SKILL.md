@@ -97,6 +97,17 @@ PR history later; a single draft PR that gets amended, or a branch you throw
 away before opening anything, keeps the record clean. Open the real PR once
 you can write the "Testing and review" section honestly.
 
+## Write from a description, not just a diff
+
+When a change is described to you after the fact rather than shown as a
+live diff or working tree, write the message from that description, in the
+terms already given — a working tree with nothing pending isn't evidence the
+change didn't happen, only that you weren't handed the diff directly. Ask
+only for specifics the description truly omits and that the rigor genuinely
+depends on (e.g., a rejected alternative that was never mentioned); don't
+stall the whole message on re-verifying details already stated in different
+words.
+
 ## Self-check before opening
 
 - Does the message explain why, not just restate the diff?

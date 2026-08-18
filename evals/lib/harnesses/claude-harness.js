@@ -9,6 +9,7 @@ import {
   loadSkillContent,
   renderJudgePrompt,
   readCachedFile,
+  withSandboxDir,
 } from "../runner-lib.js";
 
 export class ClaudeHarness extends AbstractHarness {
@@ -75,15 +76,24 @@ export class ClaudeHarness extends AbstractHarness {
       String(budget),
     ];
     if (model) flags.push("--model", model);
-    const { stdout, stderr, code } = await spawnCollect("claude", [...flags, prompt]);
-    const result = lastJsonValue(stdout);
-    return {
-      transcript: result?.result ?? "",
-      cost: result?.total_cost_usd ?? null,
-      isError: result?.is_error ?? true,
-      processExitCode: code,
-      stderr,
-    };
+    // Runs with real Read/Write/Edit/Bash/Grep/Glob access, so — like
+    // JunieHarness/OpenCodeHarness — it must not run against REPO_ROOT: the
+    // model would (and did) `git status`/`grep` this actual skills-docs repo,
+    // correctly find none of the scenario's fictional code, and stall asking
+    // for "the real repo" instead of answering the self-contained prompt.
+    return withSandboxDir(async (dir) => {
+      const { stdout, stderr, code } = await spawnCollect("claude", [...flags, prompt], {
+        cwd: dir,
+      });
+      const result = lastJsonValue(stdout);
+      return {
+        transcript: result?.result ?? "",
+        cost: result?.total_cost_usd ?? null,
+        isError: result?.is_error ?? true,
+        processExitCode: code,
+        stderr,
+      };
+    });
   }
 
   async _runJudge(rubric, scenarioPrompt, transcript, options = {}) {

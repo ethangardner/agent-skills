@@ -94,6 +94,15 @@ actually done. An approval with a clearly-labeled suggestion for later is not
 a contradiction; a review that never resolves to a decision is a cost with no
 benefit.
 
+## Resolve even without live repo access
+
+A diff described or pasted to you without access to the surrounding repo
+still gets a decisive severity call and resolution — "point me at the real
+repo for a definitive answer" is not a substitute for one. Turn genuine
+unknowns (what else calls this, what the target system's own limits are)
+into labeled questions inside the review itself, not a reason to withhold
+the approve/request-changes call.
+
 ## When NOT to over-apply this
 
 A one-line change from someone you pair with daily doesn't need the full

@@ -51,16 +51,24 @@ export function spawnCollect(cmd, args, { cwd = REPO_ROOT, input } = {}) {
 }
 
 // `spawnCollect` defaults `cwd` to REPO_ROOT, which is fine for `claude -p`
-// (restricted to `--tools Skill` on trigger cases, and never asked to write
-// files on quality/judge cases) but is NOT fine for agentic CLIs like junie
-// or opencode that have real file-write tools and no such restriction —
-// a junie eval run against this exact repo once treated eval prompts as
-// real tasks and rewrote/created files in REPO_ROOT for real (see git
-// history around the junie-harness sandboxing fix). Any harness that spawns
-// an agentic CLI with file-write access must run it against a disposable
-// directory instead, never REPO_ROOT itself. Skill discovery still works
-// from an unrelated project dir since `--skill-location` takes an absolute
-// path.
+// trigger cases (restricted to `--tools Skill`, no filesystem access
+// possible) and judge calls (`--tools ""`), but is NOT fine for anything
+// granted real file tools: agentic CLIs like junie/opencode (a junie eval
+// run against this exact repo once treated eval prompts as real tasks and
+// rewrote/created files in REPO_ROOT for real — see git history around the
+// junie-harness sandboxing fix), and — less obviously, since it's still
+// `claude -p` — ClaudeHarness's own quality bucket, which passes
+// `--tools Read,Write,Edit,Bash,Grep,Glob`. Running that against REPO_ROOT
+// let the model `git status`/`grep` this actual skills-docs repo, correctly
+// find none of a quality case's fictional scenario (a payment webhook, a
+// job queue, an npm dependency sweep), and stall asking for "the real repo"
+// instead of answering a self-contained hypothetical prompt — a real bug,
+// not just a latent write-access risk. Any harness call granted file tools
+// beyond bare `Skill` must run against a disposable directory instead of
+// REPO_ROOT itself — see `withSandboxDir` below, used by
+// `JunieHarness`/`OpenCodeHarness` for every call and by
+// `ClaudeHarness._runQualityCase`. Skill discovery still works from an
+// unrelated project dir since `--skill-location` takes an absolute path.
 export async function withSandboxDir(fn) {
   const dir = await mkdtemp(path.join(tmpdir(), "agent-skills-eval-sandbox-"));
   try {

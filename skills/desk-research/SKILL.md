@@ -100,6 +100,15 @@ end:
 Pick whichever matches the shape of the question at hand — most desk
 research is one or the other, not always a dataset to crunch.
 
+## Don't gate the answer on inputs you can work around
+
+Missing live access (web, a vendor's current pricing) or missing internal
+data to inventory is a caveat to state in the answer, not a reason to
+withhold it. Give the best-effort answer-first take from what's known or
+given, flag its confidence and what would firm it up, and offer to refine it
+if better inputs arrive — don't make producing the analysis conditional on
+the user supplying those inputs first.
+
 ## When NOT to over-apply this
 
 If the question is already answered by existing documentation, or the

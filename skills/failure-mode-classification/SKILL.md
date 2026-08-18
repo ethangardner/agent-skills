@@ -43,6 +43,12 @@ The mechanism-level statement is what makes the fix verifiable (does the fix
 actually address that code path?) and what makes the bug findable by anyone
 who later hits the same underlying cause through a different symptom.
 
+If a report already states the mechanism — a pasted stack trace, a code
+excerpt, "on closer look, X bypasses Y" — use it. Don't re-derive it from a
+codebase you were never given access to, and don't treat the absence of that
+codebase as a reason to stop; only ask a follow-up when the report genuinely
+omits something the naming or mechanism call depends on.
+
 ## Separate investigation from fix
 
 If you don't yet know the mechanism, investigate in a throwaway PR or

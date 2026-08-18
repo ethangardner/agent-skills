@@ -26,8 +26,25 @@ discovery still works from an unrelated project dir since junie's
 independent of the working/project directory. If you add a new harness
 for another agentic CLI, wrap its calls in `withSandboxDir()` too —
 `spawnCollect`'s `cwd` defaults to `REPO_ROOT`, which is safe for
-`claude -p` but not safe by default for anything with unrestricted file
-tools.
+`claude -p` trigger/judge calls (`--tools Skill` / `--tools ""`, no
+filesystem access possible) but not safe for anything with unrestricted
+file tools.
+
+That last category turned out to include `ClaudeHarness`'s own quality
+bucket, not just other CLIs: `_runQualityCase` passes
+`--tools Read,Write,Edit,Bash,Grep,Glob` and, until this was caught, ran
+against `REPO_ROOT` like everything else. The model would `git status`/`grep`
+this actual skills-docs repo, correctly find none of a quality case's
+fictional scenario (a payment webhook, a job queue, an npm dependency sweep
+that was never really run here), and stall asking the user for "the real
+repo" instead of answering the self-contained hypothetical prompt — tanking
+quality scores on every skill whose eval cases described code or data that
+(reasonably) doesn't exist in this repo. `_runQualityCase` is now wrapped in
+`withSandboxDir()` too, the same as junie/opencode. This was a correctness
+bug (false "nothing here" signal derailed otherwise-answerable cases) and a
+latent safety gap (real write/bash access to this repo during every
+claude-harness quality run) at once — no run had actually damaged anything,
+but that was luck, not a guarantee the isolation flags provided.
 
 ## Prerequisites
 
