@@ -14,9 +14,9 @@
     "test": "node --test src/dateParser.test.js",
     "link": "bash scripts/link-skills.sh",
     "eval": "node evals/run.js",
-    "catalog": "node scripts/generate-catalog.js",
-    "format": "prettier --write README.md evals/README.md",
-    "format:check": "prettier --check README.md evals/README.md"
+    "catalog": "node scripts/generate-catalog.js && prettier --write CATALOG.md",
+    "format": "prettier --write README.md evals/README.md CATALOG.md",
+    "format:check": "prettier --check README.md evals/README.md CATALOG.md"
   },
   "devDependencies": {
     "prettier": "^3.9.6"
