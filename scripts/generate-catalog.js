@@ -25,6 +25,7 @@ const PREFIX_CATEGORIES = [
 const CATEGORY_OVERRIDES = {
   "kanban-method": "Project Management",
   "go-pointer-value-semantics": "Language-Specific",
+  "dbt-dearman-give-fast": "Communication & Interpersonal",
 };
 
 // Order sections should appear in the output, regardless of discovery order.
@@ -33,6 +34,7 @@ const CATEGORY_ORDER = [
   "Liberating Structures",
   "Workflow & Practice",
   "Project Management",
+  "Communication & Interpersonal",
   "Language-Specific",
 ];
 

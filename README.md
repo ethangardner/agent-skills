@@ -4,11 +4,11 @@ A collection of agent skills for software engineering, based on SWEBOK V4 and ot
 
 ## Skills
 
-44 skills across five categories — see [CATALOG.md](CATALOG.md) for the full,
+45 skills across six categories — see [CATALOG.md](CATALOG.md) for the full,
 generated list: SWEBOK knowledge areas, Liberating Structures facilitation
-techniques, Ethan's own workflow/practice skills (`eg-*`), and a couple of
-standalone language/process skills. Run `npm run catalog` to regenerate it
-after adding, removing, or renaming a skill.
+techniques, Ethan's own workflow/practice skills (`eg-*`), and a handful of
+standalone language/process/communication skills. Run `npm run catalog` to
+regenerate it after adding, removing, or renaming a skill.
 
 ## Installation
 
