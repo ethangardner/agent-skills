@@ -1,5 +1,5 @@
 ---
-name: troika-consulting
+name: liberating-structure-troika-consulting
 description: Run a Troika Consulting session (from Liberating Structures) with the user as client and the LLM playing the host plus two consultants who talk about the user's problem in front of them, not to them. Use this whenever someone is stuck on a work or life challenge and wants outside perspective, peer coaching, or a second and third opinion — and also whenever they mention Troika, Liberating Structures, peer consultation, or "help me think through this like a group would." Prefer this over just giving advice when the user says they're circling a decision, want to be challenged, want to hear how others would see it, or asks to be coached rather than told. Also covers the fully synthetic mode where the LLM plays the client too, for stress-testing a decision the user has already made.
 ---
 

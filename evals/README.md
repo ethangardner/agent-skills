@@ -279,7 +279,7 @@ as baseline yourself; nothing is auto-promoted.
   skills). This does *not* fully isolate to only the 5 pilot skills — a
   handful of skills bundled with Claude Code itself (e.g. `debug`,
   `code-review`) always load and can plausibly compete with
-  `failure-mode-classification` and `constructive-code-review` for a
+  `eg-failure-mode-classification` and `eg-constructive-code-review` for a
   trigger. If a trigger-recall case unexpectedly fails, check `firedSkills`
   in the result JSON before assuming the SKILL.md description is at fault.
 - **Cost is front-loaded and variable.** Anthropic's prompt cache is
