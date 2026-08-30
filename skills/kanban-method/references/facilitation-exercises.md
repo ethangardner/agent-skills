@@ -139,16 +139,16 @@ After introducing the framework (via advice or via these exercises), have
 each person or the team as a whole fill in one row per section actually
 covered:
 
-| Section | Key takeaway | One action item |
-|---|---|---|
-| Flow | | |
-| Clarity | | |
-| Focus | | |
-| Ownership | | |
-| Collaboration | | |
-| Unhide | | |
-| Illumination | | |
-| Coordination | | |
+| Section       | Key takeaway | One action item |
+|---------------|--------------|-----------------|
+| Flow          |              |                 |
+| Clarity       |              |                 |
+| Focus         |              |                 |
+| Ownership     |              |                 |
+| Collaboration |              |                 |
+| Unhide        |              |                 |
+| Illumination  |              |                 |
+| Coordination  |              |                 |
 
 Keep the action items concrete and owned — "we should communicate better"
 is not an action item; "add a Blocked column and review it every Kanban

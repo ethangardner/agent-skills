@@ -186,12 +186,12 @@ symptom of wanting certainty the work doesn't actually have. Prioritize
 using **Classes of Service** instead — this is the direct answer to "how do
 we prioritize the roadmap":
 
-| Class | Definition | Roadmap treatment |
-|---|---|---|
-| **Standard** | Has business value, no specific delivery timeframe | Sequence by value and flow position |
-| **Fixed Date** | Value drops sharply after a specific date (regulatory, contractual, seasonal) | Schedule backward from the date; protect its slot |
+| Class          | Definition                                                                                               | Roadmap treatment                                                                                                       |
+|----------------|----------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
+| **Standard**   | Has business value, no specific delivery timeframe                                                       | Sequence by value and flow position                                                                                     |
+| **Fixed Date** | Value drops sharply after a specific date (regulatory, contractual, seasonal)                            | Schedule backward from the date; protect its slot                                                                       |
 | **Intangible** | No obvious direct value or timeframe, but carries growing risk if deferred (tech debt, security hygiene) | Deliberately budget capacity for it — it never wins a head-to-head vs. visible value, so it needs a reserved allocation |
-| **Expedite** | Immediate value; cost escalates every additional hour | Pull immediately, ahead of WIP limits, and give it the whole team's focus until delivered |
+| **Expedite**   | Immediate value; cost escalates every additional hour                                                    | Pull immediately, ahead of WIP limits, and give it the whole team's focus until delivered                               |
 
 Practical guidance:
 
@@ -229,18 +229,18 @@ because "we cover that in stand-up."
 
 Old instinct often drives plans that feel productive but aren't. Substitute:
 
-| Instinct | Kanban practice |
-|---|---|
-| Optimize for efficiency/busyness | Optimize for flow |
-| Batch work together | Let items flow independently |
-| Stay busy | Limit work in progress |
-| Push/pre-assign work | Pull work when ready |
-| Reward individual specialization | Swarm to unblock the team |
-| Manage worry | Reserve slack, spend it on real risk |
-| Demand a perfect estimate | Unhide the work, then move on |
-| Demand certainty (due dates for everything) | Prioritize by risk/Class of Service |
-| Optimize personal standing (narcissism) | Think in terms of the whole system |
-| Report status | Report what's getting finished |
+| Instinct                                    | Kanban practice                      |
+|---------------------------------------------|--------------------------------------|
+| Optimize for efficiency/busyness            | Optimize for flow                    |
+| Batch work together                         | Let items flow independently         |
+| Stay busy                                   | Limit work in progress               |
+| Push/pre-assign work                        | Pull work when ready                 |
+| Reward individual specialization            | Swarm to unblock the team            |
+| Manage worry                                | Reserve slack, spend it on real risk |
+| Demand a perfect estimate                   | Unhide the work, then move on        |
+| Demand certainty (due dates for everything) | Prioritize by risk/Class of Service  |
+| Optimize personal standing (narcissism)     | Think in terms of the whole system   |
+| Report status                               | Report what's getting finished       |
 
 ## Applying this to common requests
 
