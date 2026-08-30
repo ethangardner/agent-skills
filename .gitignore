@@ -227,3 +227,7 @@ evals/results/
 # evals/README.md; .junie/plans/ is junie's own planning-session scratch).
 /PROCESS.md
 /.junie/plans/
+
+# Node
+node_modules/
+npm-debug.log*

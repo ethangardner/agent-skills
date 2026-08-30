@@ -72,7 +72,7 @@ but that was luck, not a guarantee the isolation flags provided.
     and look for a `Read skill` step in the output before trusting a
     junie eval run's trigger numbers. `JunieHarness` has been verified
     against a live `junie` run this way: it uses `--output-format
-    json-stream` and looks for `{"type":"step","name":"Read skill",...}`
+json-stream` and looks for `{"type":"step","name":"Read skill",...}`
     lines, which is junie's actual, confirmed fire signal (its plain-text
     output has no stable machine-readable marker for this).
   - `opencode` has **no equivalent flag or config key** — per opencode.ai's
@@ -136,7 +136,7 @@ and the event stream is scanned for whether the target skill actually got
 invoked. Recall is measured over `trigger_positive`; precision over
 `trigger_negative`, which is itself split into `unrelated` prompts (should
 obviously not fire) and `near_miss` prompts (phrased to plausibly steal an
-*adjacent* skill's territory instead — chosen from each skill's own
+_adjacent_ skill's territory instead — chosen from each skill's own
 cross-references to other skills where possible, so a near-miss failure
 means two skills are actually colliding, not just an arbitrary unrelated
 prompt firing by accident).
@@ -185,14 +185,15 @@ To significantly reduce evaluation costs and support local execution on standard
 namespace across harnesses.** A name valid for one is usually invalid, or
 silently means something different, for another:
 
-| `--harness` | Model names come from | Example |
-| --- | --- | --- |
-| `claude` (default) | Anthropic model aliases/IDs the `claude` CLI accepts | `sonnet`, `haiku`, `claude-sonnet-5` |
-| `junie` | Whatever the `junie` CLI lists — bare names, not provider-prefixed | `sonnet`, `gemini-3.5-flash-lite` |
-| `opencode` | Whatever your OpenCode config/provider defines — often provider-prefixed | `anthropic/claude-sonnet-4-5` |
-| `api` | Whatever the OpenAI-compatible `--endpoint` actually serves | an Ollama tag (`qwen2.5-coder:7b`), an OpenRouter slug (`google/gemini-2.0-flash-exp:free`) |
+| `--harness`        | Model names come from                                                    | Example                                                                                     |
+| ------------------ | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `claude` (default) | Anthropic model aliases/IDs the `claude` CLI accepts                     | `sonnet`, `haiku`, `claude-sonnet-5`                                                        |
+| `junie`            | Whatever the `junie` CLI lists — bare names, not provider-prefixed       | `sonnet`, `gemini-3.5-flash-lite`                                                           |
+| `opencode`         | Whatever your OpenCode config/provider defines — often provider-prefixed | `anthropic/claude-sonnet-4-5`                                                               |
+| `api`              | Whatever the OpenAI-compatible `--endpoint` actually serves              | an Ollama tag (`qwen2.5-coder:7b`), an OpenRouter slug (`google/gemini-2.0-flash-exp:free`) |
 
 Consequences:
+
 - **`--judge-model` is scoped to `--judge-harness`, not `--harness`.** If
   you set `--harness junie` and leave `--judge-harness` unset, it defaults
   to `junie` too, so `--judge-model` must also be a junie model name.
@@ -218,13 +219,17 @@ Consequences:
   actually broken.
 
 ### Hybrid Model Split
+
 You can route scenario generation to a free/local engine while reserving a lightweight cloud model for rubric judging:
+
 ```sh
 node evals/run.js --harness api --endpoint http://localhost:11434/v1 --judge-harness claude --judge-model haiku
 ```
 
 ### Local Setup with Ollama & Qwen 2.5 Coder
+
 For low-spec local hardware (e.g. 8GB - 16GB RAM):
+
 1. Install and start [Ollama](https://ollama.com).
 2. Pull a compact coding model: `ollama pull qwen2.5-coder:7b`
 3. Execute evals locally with zero API costs:
@@ -233,22 +238,29 @@ For low-spec local hardware (e.g. 8GB - 16GB RAM):
    ```
 
 ### Free Cloud APIs (OpenRouter / Gemini Flash)
+
 If local GPU resources are unavailable:
+
 ```sh
 node evals/run.js --harness api --endpoint https://openrouter.ai/api/v1 --api-key <YOUR_KEY> --model google/gemini-2.0-flash-exp:free
 ```
 
 ### Junie CLI with Custom / Lightweight Models
+
 Run evaluations via Junie CLI specifying lightweight or custom models:
+
 ```sh
 node evals/run.js --harness junie --model gemini-3.5-flash-lite --judge-model sonnet
 ```
+
 (Model names are junie's own bare names, not provider-prefixed — see
 "Model names are harness-specific" below. Run `junie` with an invalid
 `--model` once to get the CLI's current valid-name list printed back at you.)
 
 ### Single Case & Trigger Smoke Testing
+
 Limit evaluation execution to a single specific case ID to iterate rapidly:
+
 ```sh
 node evals/run.js swebok-process --case tp-1 --mock
 ```
@@ -273,10 +285,10 @@ as baseline yourself; nothing is auto-promoted.
   robustness either. Multi-sample majority voting would fix this but
   roughly N-doubles the cost — not done for this pilot.
 - **Imperfect isolation.** Trigger/quality runs use `--setting-sources
-  project --strict-mcp-config` to avoid dragging in this machine's full
+project --strict-mcp-config` to avoid dragging in this machine's full
   set of globally-installed skills and MCP servers (which otherwise both
   inflates cost and pollutes trigger evals with irrelevant competing
-  skills). This does *not* fully isolate to only the 5 pilot skills — a
+  skills). This does _not_ fully isolate to only the 5 pilot skills — a
   handful of skills bundled with Claude Code itself (e.g. `debug`,
   `code-review`) always load and can plausibly compete with
   `eg-failure-mode-classification` and `eg-constructive-code-review` for a

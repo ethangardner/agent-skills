@@ -13,6 +13,12 @@
   "scripts": {
     "test": "node --test src/dateParser.test.js",
     "link": "bash scripts/link-skills.sh",
-    "eval": "node evals/run.js"
+    "eval": "node evals/run.js",
+    "catalog": "node scripts/generate-catalog.js",
+    "format": "prettier --write README.md evals/README.md",
+    "format:check": "prettier --check README.md evals/README.md"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.6"
   }
 }
