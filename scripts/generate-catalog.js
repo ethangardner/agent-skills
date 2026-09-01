@@ -112,7 +112,7 @@ function stripQuotes(s) {
 function firstSentence(description) {
   const match = description.match(/^(.*?\.)\s+[A-Z]/);
   let sentence = match ? match[1] : description;
-  const MAX_LEN = 220;
+  const MAX_LEN = 450;
   if (sentence.length > MAX_LEN) {
     sentence = sentence.slice(0, MAX_LEN).trimEnd() + "…";
   }
