@@ -174,7 +174,11 @@ Close with a concrete note on when the group will revisit this chart. P2P
 produces a first draft, not a permanent artifact — initiatives drift, and the
 source structure explicitly builds in a follow-up planning step for this
 reason. Get a real date or trigger ("revisit after the first month," "revisit
-when we hit 50 members"), not "we'll check in sometime."
+when we hit 50 members"), not "we'll check in sometime." When that revisit
+date arrives, `liberating-structure-what-so-what-now-what` is the dedicated
+structure for running the reflection questions above properly — this closing
+phase only has room to compress them into one message; a real revisit
+deserves the full three-phase version.
 
 Optional pressure-test personas and a retrofit/audit mode for auditing an
 initiative that never went through this process are in
